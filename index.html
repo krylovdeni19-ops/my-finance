@@ -13,7 +13,7 @@
 <body>
 <div class="app-shell">
 <header class="topbar">
-  <div><div class="brand">MY <span>FINANCE</span></div><div class="version">ЛИЧНЫЙ ФИНАНСОВЫЙ ПЛАНИРОВЩИК · v3.3.0</div></div>
+  <div><div class="brand">MY <span>FINANCE</span></div><div class="version">ЛИЧНЫЙ ФИНАНСОВЫЙ ПЛАНИРОВЩИК · v3.4.0</div></div>
   <button class="icon-btn" id="settingsOpen" aria-label="Настройки">⚙</button>
 </header>
 <nav class="tabs" aria-label="Разделы">
@@ -29,7 +29,10 @@
     <article class="metric-card"><span class="metric-icon green">↗</span><div class="eyebrow">К РАСПРЕДЕЛЕНИЮ</div><strong id="availableTotal">0 ₽</strong><small>После резерва и платежей</small></article>
   </section>
   <section class="section"><div class="section-heading"><div><div class="eyebrow">ТВОИ ДЕНЬГИ</div><h2>Распределение</h2></div><button class="small-btn" id="editShares">Изменить доли</button></div><div id="shortageNotice" class="notice hidden"></div><div id="categories" class="category-list"></div><div class="total-line"><span>Всего распределено</span><strong id="sharesTotal">100%</strong></div></section>
-  <section class="section"><div class="section-heading"><div><div class="eyebrow">НАКОПЛЕНИЯ</div><h2>Финансовая подушка</h2></div><span class="pill">10% с дохода</span></div><div class="reserve-card"><div class="reserve-symbol">✦</div><div><div class="eyebrow">РАСЧЁТНО НАКОПЛЕНО</div><strong id="allReserve">0 ₽</strong><small>Расчётные 10% от всех внесённых доходов, не банковский баланс.</small></div></div></section>
+  <section class="section"><div class="section-heading"><div><div class="eyebrow">НАКОПЛЕНИЯ</div><h2>Финансовая подушка</h2></div><span class="pill">10% с дохода</span></div><div class="reserve-card"><div class="reserve-symbol">✦</div><div><div class="eyebrow">РАСЧЁТНО НАКОПЛЕНО</div><strong id="allReserve">0 ₽</strong><small>Расчётные 10% от всех внесённых доходов, не банковский баланс.</small>
+          <div class="reserve-progress"><div class="reserve-progress-head"><span>Цель подушки</span><strong id="reserveProgressText">Цель не задана</strong></div><div class="progress"><span id="reserveProgressBar" style="width:0%"></span></div></div>
+        </div></div></section>
+  <section class="section goals-section"><div class="section-heading"><div><div class="eyebrow">НАКОПЛЕНИЯ</div><h2>Мои цели</h2></div><button class="primary-btn" id="addGoalOpen">＋ Цель</button></div><div id="goalsList" class="goals-list"></div><div id="emptyGoals" class="empty-state"><div class="empty-icon">✦</div><strong>Целей пока нет</strong><span>Добавь цель и укажи текущую сумму и желаемый результат.</span></div></section>
   <section class="section income-section"><div class="section-heading"><div><div class="eyebrow">ПОПОЛНЕНИЯ</div><h2>Доходы</h2></div><button class="primary-btn" id="addIncomeOpen">＋ Добавить</button></div><div id="incomeList" class="income-list"></div><div id="emptyIncome" class="empty-state"><div class="empty-icon">＋</div><strong>Доходов пока нет</strong><span>Добавь поступление — приложение рассчитает распределение автоматически.</span></div></section>
 </section>
 <section id="analyticsView" class="hidden">
@@ -45,14 +48,16 @@
 </section>
 <section class="bottom-actions"><button class="secondary-btn" id="exportBtn">Экспорт данных</button><button class="secondary-btn" id="importBtn">Импорт данных</button><input type="file" id="importFile" accept="application/json,.json" hidden></section>
 </main>
-<footer>MY FINANCE <span>·</span> версия 3.3.0</footer>
+<footer>MY FINANCE <span>·</span> версия 3.4.0</footer>
 </div>
 <div class="modal-backdrop hidden" id="incomeModal"><div class="modal"><div class="modal-head"><div><div class="eyebrow">НОВОЕ ПОПОЛНЕНИЕ</div><h2 id="incomeModalTitle">Добавить доход</h2></div><button class="close-btn" data-close="incomeModal">×</button></div><form id="incomeForm"><label>Сумма, ₽<input id="incomeAmount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="Например, 75000" required></label><label>Дата поступления<input id="incomeDate" type="date" required></label><label>Источник / комментарий<input id="incomeNote" type="text" maxlength="80" placeholder="Зарплата, подработка…"></label><div class="form-actions"><button type="button" class="secondary-btn" data-close="incomeModal">Отмена</button><button class="primary-btn" type="submit">Сохранить</button></div></form></div></div>
 <div class="modal-backdrop hidden" id="settingsModal"><div class="modal"><div class="modal-head"><div><div class="eyebrow">ПАРАМЕТРЫ</div><h2>Настройки</h2></div><button class="close-btn" data-close="settingsModal">×</button></div><form id="settingsForm">
 <div class="setting-group"><h3>Обязательные платежи в месяц</h3><label>Кредит №1, ₽<input id="credit1" type="number" min="0" step="0.01"></label><label>Кредит №2, ₽<input id="credit2" type="number" min="0" step="0.01"></label><label>Жильё / аренда, ₽<input id="housing" type="number" min="0" step="0.01"></label><label>ЖКХ, ₽<input id="utilities" type="number" min="0" step="0.01"></label><label>Связь, ₽<input id="phone" type="number" min="0" step="0.01"></label><label>Прочие обязательные, ₽<input id="otherFixed" type="number" min="0" step="0.01"></label></div>
+<div class="setting-group"><h3>Финансовая подушка</h3><p class="helper">Цель не меняет правило автоматического накопления 10% от дохода.</p><label>Желаемый размер подушки, ₽<input id="reserveTarget" type="number" min="0" step="1" inputmode="numeric" placeholder="Например, 300000"></label></div>
 <div class="setting-group"><h3>Распределение остатка</h3><p class="helper">Укажи долю каждой категории. В сумме должно получиться ровно 100%.</p><div id="shareInputs"></div><div class="share-validation" id="shareValidation">Итого: 100%</div></div>
 <div class="form-actions"><button type="button" class="secondary-btn" data-close="settingsModal">Отмена</button><button class="primary-btn" type="submit">Сохранить</button></div></form>
-<div class="settings-footer"><div class="version-label">MY FINANCE · VERSION 3.3.0</div><button type="button" class="danger-btn" id="resetBtn">Сбросить все данные</button></div></div></div>
+<div class="settings-footer"><div class="version-label">MY FINANCE · VERSION 3.4.0</div><button type="button" class="danger-btn" id="resetBtn">Сбросить все данные</button></div></div></div>
+<div class="modal-backdrop hidden" id="goalModal"><div class="modal"><div class="modal-head"><div><div class="eyebrow">ПЛАН НАКОПЛЕНИЙ</div><h2 id="goalModalTitle">Новая цель</h2></div><button class="close-btn" data-close="goalModal">×</button></div><form id="goalForm"><label>Название цели<input id="goalName" type="text" maxlength="50" placeholder="Например, отпуск" required></label><label>Сколько нужно накопить, ₽<input id="goalTarget" type="number" min="1" step="1" inputmode="numeric" required></label><label>Уже накоплено, ₽<input id="goalSaved" type="number" min="0" step="1" inputmode="numeric" value="0"></label><label>Желаемый срок (необязательно)<input id="goalDate" type="date"></label><div class="form-actions"><button type="button" class="secondary-btn" data-close="goalModal">Отмена</button><button class="primary-btn" type="submit">Сохранить</button></div></form></div></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="app.js"></script>
 </body></html>
