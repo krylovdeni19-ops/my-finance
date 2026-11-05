@@ -1,271 +1,124 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#101820">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Мой бюджет">
-  <title>Мой бюджет</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <style>
-    :root{--bg:#0c131b;--panel:#151f2b;--panel2:#1b2937;--text:#f4f7fb;--muted:#9aa9b8;--line:#2b3a49;--accent:#7ce0bd;--accent2:#a7d8ff;--warn:#f3c969;--bad:#ff8c8c;--radius:20px}
-    *{box-sizing:border-box} body{margin:0;background:radial-gradient(1000px 500px at 10% -10%,#1d3543 0%,transparent 60%),var(--bg);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 calc(88px + env(safe-area-inset-bottom))}
-    button,input,select{font:inherit} button{cursor:pointer}
-    .app{max-width:760px;margin:auto;padding:18px 16px 24px}
-    header{display:flex;align-items:center;justify-content:space-between;margin:8px 2px 22px}
-    .brand{font-weight:800;letter-spacing:.2px;font-size:20px}.brand span{color:var(--accent)}
-    .month{color:var(--muted);font-size:13px}
-    .hero{background:linear-gradient(135deg,#203b48,#1b2b39 65%,#233647);border:1px solid #365060;border-radius:26px;padding:22px;margin-bottom:14px;box-shadow:0 18px 45px #0003}
-    .eyebrow{color:#bdd0dc;font-size:12px;text-transform:uppercase;letter-spacing:1px}
-    .balance{font-size:clamp(34px,9vw,48px);font-weight:800;letter-spacing:-1.5px;margin:8px 0 5px}
-    .sub{color:#c0d0dc;font-size:13px}
-    .hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
-    .mini{background:#0e1a2480;border:1px solid #ffffff14;border-radius:15px;padding:12px}
-    .mini small{display:block;color:#b5c5d1;margin-bottom:5px}.mini strong{font-size:17px}
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 22px}
-    .btn{border:0;border-radius:15px;padding:15px 14px;font-weight:750;background:var(--accent);color:#10221f}
-    .btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-    .section-head{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 11px}
-    h2{font-size:17px;margin:0}.hint{font-size:12px;color:var(--muted)}
-    .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px;min-width:0}
-    .card.full{grid-column:1/-1}
-    .label{font-size:12px;color:var(--muted);margin-bottom:8px}
-    .value{font-size:20px;font-weight:750;letter-spacing:-.4px}
-    .positive{color:var(--accent)}.negative{color:var(--bad)}.muted{color:var(--muted)}
-    .bar{height:7px;background:#2a3947;border-radius:10px;overflow:hidden;margin-top:11px}
-    .bar>i{display:block;height:100%;background:var(--accent);border-radius:10px;width:0}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .category{padding:13px 0;border-bottom:1px solid var(--line)}.category:last-child{border:0;padding-bottom:0}
-    .cat-name{font-weight:650}.cat-meta{font-size:12px;color:var(--muted);margin-top:4px}
-    .cat-amount{text-align:right;font-weight:700;white-space:nowrap}
-    .tabs{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:9px 10px calc(9px + env(safe-area-inset-bottom));background:#0e1721ed;backdrop-filter:blur(18px);border-top:1px solid var(--line);display:flex;justify-content:center}
-    .tabbar{width:min(760px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-    .tab{border:0;background:transparent;color:var(--muted);padding:8px 3px;border-radius:12px;font-size:11px}
-    .tab b{display:block;font-size:19px;margin-bottom:3px;font-weight:500}.tab.active{background:#203344;color:var(--accent)}
-    .view{display:none}.view.active{display:block}
-    .form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0}
-    .field{margin:12px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
-    input,select{width:100%;background:#0e1721;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:13px;outline:none}
-    input:focus,select:focus{border-color:var(--accent)}
-    .form .btn{width:100%;margin-top:8px}
-    .list-item{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
-    .list-item:last-child{border:0}.list-item small{display:block;color:var(--muted);margin-top:4px}
-    .delete{border:0;background:transparent;color:var(--bad);padding:6px 8px}
-    .notice{padding:13px 14px;border-radius:14px;background:#3a3020;color:#ffe3a0;font-size:13px;line-height:1.4;margin:12px 0}
-    .notice.good{background:#17362f;color:#a9f0d8}
-    .empty{color:var(--muted);text-align:center;padding:25px 10px;font-size:13px}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .small-btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:11px;padding:9px 11px;font-size:12px}
-    .foot{color:var(--muted);font-size:11px;line-height:1.5;margin:18px 4px}
-    @media(min-width:600px){.app{padding:24px}.hero-grid{grid-template-columns:repeat(4,1fr)}.cards{grid-template-columns:repeat(4,1fr)}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b141d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MY FINANCE</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#0b141d;--panel:#152330;--panel2:#1b2c3b;--line:#2a4050;--text:#f1f5f8;--muted:#9aabba;--mint:#79dfbf;--red:#ff8585;--yellow:#f4c66c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+header{padding:22px 20px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:rgba(11,20,29,.96);z-index:5;backdrop-filter:blur(12px)}
+.logo{font-size:22px;font-weight:850;letter-spacing:-.6px}.logo span{color:var(--mint)}.month{color:var(--muted);font-size:14px}
+main{max-width:760px;margin:auto;padding:0 16px 24px}.view{display:none}.view.active{display:block}
+h2{font-size:21px;margin:18px 2px 14px}.sub{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(145deg,#203b49,#1a2c3b);border:1px solid #365365;border-radius:26px;padding:24px 20px;margin:12px 0 16px}
+.eyebrow{font-size:12px;letter-spacing:1.1px;color:#b8cbd4;text-transform:uppercase}.big{font-size:clamp(38px,10vw,52px);font-weight:850;letter-spacing:-2px;margin:12px 0 2px}.hero-sub{color:#b7c7d1;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#132430;border:1px solid #2a3d4a;border-radius:18px;padding:13px}.stat small{display:block;color:#aebdc8;margin-bottom:8px}.stat b{font-size:20px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 20px}.btn{border:0;border-radius:17px;padding:16px 12px;font-weight:750;font-size:16px;background:var(--mint);color:#09241e;cursor:pointer}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.danger{background:#48272d;color:#ffdada}
+.note{background:#15382f;color:#a5ead4;border-radius:18px;padding:16px;line-height:1.45;margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px;margin:12px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.row + .row{margin-top:8px}.amount{font-weight:800;font-size:18px}.muted{color:var(--muted)}
+.progress{height:9px;background:#2a3b49;border-radius:20px;overflow:hidden;margin-top:12px}.progress i{display:block;height:100%;background:var(--mint);border-radius:20px;width:0}
+.category{padding:14px 0;border-bottom:1px solid #2a3b49}.category:last-child{border:0;padding-bottom:0}.category:first-child{padding-top:0}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#0e1923;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));}
+nav button{border:0;background:transparent;color:var(--muted);padding:10px 3px;border-radius:15px;font-size:12px}nav button strong{display:block;font-size:21px;margin-bottom:3px}nav button.active{background:#203545;color:var(--mint)}
+label{display:block;color:var(--muted);font-size:14px;margin:14px 0 7px}input,select{width:100%;background:#0e1923;border:1px solid #304657;color:var(--text);padding:15px;border-radius:14px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--mint)}
+form .btn{width:100%;margin-top:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid>div{min-width:0}
+.entry{padding:13px 0;border-bottom:1px solid #2a3b49}.entry:last-child{border:0}.entry-title{font-weight:700}.entry-actions{display:flex;gap:8px}.tiny{border:1px solid var(--line);background:#1b2c3b;color:var(--text);border-radius:10px;padding:7px 10px}.tiny.edit{color:var(--mint)}
+.month-control{display:flex;gap:8px;align-items:center}.month-control input{max-width:170px;padding:9px}
+.empty{text-align:center;color:var(--muted);padding:28px 8px}
+.settings-row{padding:12px 0;border-bottom:1px solid #2a3b49}.settings-row:last-child{border:0}
+.small-btn{background:#203545;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:12px}
+.toast{position:fixed;left:16px;right:16px;bottom:100px;background:#234438;color:#d8fff1;padding:13px 16px;border-radius:14px;text-align:center;display:none;z-index:30}
+@media(min-width:600px){main{padding-left:22px;padding-right:22px}.hero{padding:28px}.card{padding:22px}}
+</style>
 </head>
 <body>
-<div class="app">
-  <header><div class="brand">MY<span>FINANCE</span></div><div class="month" id="monthLabel"></div></header>
-
-  <main>
-    <section class="view active" id="view-home">
-      <div class="hero">
-        <div class="eyebrow">Доступно после обязательных резервов</div>
-        <div class="balance" id="available">0 ₽</div>
-        <div class="sub" id="heroSub">Добавь поступление, чтобы рассчитать бюджет</div>
-        <div class="hero-grid">
-          <div class="mini"><small>Доходы</small><strong id="totalIncome">0 ₽</strong></div>
-          <div class="mini"><small>Фонд отопления — 10%</small><strong id="savings">0 ₽</strong></div>
-          <div class="mini"><small>Кредиты</small><strong id="credits">0 ₽</strong></div>
-          <div class="mini"><small>Другие обязательства</small><strong id="mandatory">0 ₽</strong></div>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn" onclick="openTab('income')">＋ Добавить доход</button>
-        <button class="btn secondary" onclick="openTab('expense')">－ Записать расход</button>
-      </div>
-      <div id="alertBox"></div>
-      <div class="section-head"><h2>Бюджет по категориям</h2><span class="hint">план / потрачено</span></div>
-      <div class="card full" id="categorySummary"></div>
-      <div class="section-head"><h2>Быстрый обзор</h2></div>
-      <div class="cards">
-        <div class="card"><div class="label">Потрачено</div><div class="value" id="spentTotal">0 ₽</div></div>
-        <div class="card"><div class="label">Остаток категорий</div><div class="value positive" id="leftTotal">0 ₽</div></div>
-        <div class="card"><div class="label">Обязательства всего</div><div class="value" id="obligationsTotal">0 ₽</div></div>
-        <div class="card"><div class="label">Нераспределено</div><div class="value" id="unallocated">0 ₽</div></div>
-      </div>
-      <p class="foot">Данные сохраняются на этом устройстве. Пока это локальный бюджетный помощник: он не подключается к банку и не совершает платежи.</p>
-    </section>
-
-    <section class="view" id="view-income">
-      <div class="section-head"><h2>Доходы</h2><span class="hint">поступления за месяц</span></div>
-      <div class="form">
-        <div class="field"><label>Сумма поступления, ₽</label><input id="incomeAmount" type="number" inputmode="decimal" min="0" placeholder="Например, 100000"></div>
-        <div class="field"><label>Источник</label><input id="incomeSource" placeholder="Зарплата, аванс, премия…"></div>
-        <div class="field"><label>Дата</label><input id="incomeDate" type="date"></div>
-        <button class="btn" onclick="addIncome()">Добавить поступление</button>
-      </div>
-      <div class="section-head"><h2>История поступлений</h2></div><div class="card" id="incomeList"></div>
-    </section>
-
-    <section class="view" id="view-expense">
-      <div class="section-head"><h2>Новый расход</h2><span class="hint">запись траты</span></div>
-      <div class="form">
-        <div class="field"><label>Сумма, ₽</label><input id="expenseAmount" type="number" inputmode="decimal" min="0" placeholder="Например, 1250"></div>
-        <div class="field"><label>Категория</label><select id="expenseCategory"></select></div>
-        <div class="field"><label>Комментарий (необязательно)</label><input id="expenseNote" placeholder="Покупки в магазине…"></div>
-        <div class="field"><label>Дата</label><input id="expenseDate" type="date"></div>
-        <button class="btn" onclick="addExpense()">Сохранить расход</button>
-      </div>
-      <div class="section-head"><h2>Последние расходы</h2></div><div class="card" id="expenseList"></div>
-    </section>
-
-    <section class="view" id="view-settings">
-      <div class="section-head"><h2>Настройки бюджета</h2></div>
-      <div class="form">
-        <div class="row"><strong>Приоритетные обязательства</strong><span class="hint">в месяц</span></div>
-        <div class="field"><label>Кредит №1 — ежемесячный платёж, ₽</label><input id="credit1" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <div class="field"><label>Кредит №2 — ежемесячный платёж, ₽</label><input id="credit2" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <div class="field"><label>Жильё / аренда, ₽</label><input id="housing" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <div class="field"><label>ЖКХ, ₽</label><input id="utilities" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <div class="field"><label>Связь и интернет, ₽</label><input id="communication" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <div class="field"><label>Другие обязательные платежи, ₽</label><input id="otherMandatory" type="number" inputmode="decimal" min="0" placeholder="0"></div>
-        <button class="btn" onclick="saveSettings()">Сохранить обязательства</button>
-      </div>
-      <div class="form">
-        <div class="row"><strong>Распределение остатка</strong><span class="hint">в процентах</span></div>
-        <p class="hint">После 10% в фонд отопления и обязательных платежей оставшаяся сумма распределяется по этим долям. Сумма долей должна быть 100%.</p>
-        <div id="categorySettings"></div>
-        <button class="btn" onclick="saveCategories()">Сохранить распределение</button>
-      </div>
-      <div class="form">
-        <strong>Данные и резервная копия</strong>
-        <p class="hint">Экспортируй резервную копию перед очисткой браузера или переносом на другое устройство.</p>
-        <div class="split">
-          <button class="small-btn" onclick="exportData()">Экспорт JSON</button>
-          <button class="small-btn" onclick="document.getElementById('importFile').click()">Импорт JSON</button>
-        </div>
-        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)">
-        <button class="small-btn" style="width:100%;margin-top:10px;color:var(--bad)" onclick="resetData()">Сбросить все данные</button>
-      </div>
-    </section>
-  </main>
-</div>
-<nav class="tabs"><div class="tabbar">
-  <button class="tab active" data-tab="home" onclick="openTab('home')"><b>⌂</b>Обзор</button>
-  <button class="tab" data-tab="income" onclick="openTab('income')"><b>＋</b>Доходы</button>
-  <button class="tab" data-tab="expense" onclick="openTab('expense')"><b>−</b>Расходы</button>
-  <button class="tab" data-tab="settings" onclick="openTab('settings')"><b>⚙</b>Настройки</button>
-</div></nav>
-<script>
-const KEY='myfinance.v1';
-const defaultState={
-  incomes:[], expenses:[],
-  obligations:{credit1:0,credit2:0,housing:0,utilities:0,communication:0,otherMandatory:0},
-  categories:[
-    {name:'Продукты',percent:35},{name:'Транспорт',percent:10},{name:'Быт и дом',percent:8},
-    {name:'Здоровье',percent:5},{name:'Одежда и личное',percent:7},{name:'Кафе и развлечения',percent:10},{name:'Свободные деньги',percent:25}
-  ]
-};
-let state=load();
-function load(){try{return {...structuredClone(defaultState),...JSON.parse(localStorage.getItem(KEY)||'{}')};}catch(e){return structuredClone(defaultState)}}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
-function money(n){return new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(Number(n)||0)}
-function num(id){return Math.max(0,Number(document.getElementById(id).value)||0)}
-function monthKey(d){return (d||'').slice(0,7)}
-function currentMonth(){return new Date().toISOString().slice(0,7)}
-function inMonth(x){return monthKey(x.date)===currentMonth()}
-function totalIncome(){return state.incomes.filter(inMonth).reduce((s,x)=>s+x.amount,0)}
-function totalSpent(){return state.expenses.filter(inMonth).reduce((s,x)=>s+x.amount,0)}
-function obligationSum(){return Object.values(state.obligations).reduce((s,n)=>s+(Number(n)||0),0)}
-function creditSum(){return state.obligations.credit1+state.obligations.credit2}
-function savings(){return totalIncome()*.10}
-function flexible(){return totalIncome()-savings()-obligationSum()}
-function spentIn(cat){return state.expenses.filter(x=>inMonth(x)&&x.category===cat).reduce((s,x)=>s+x.amount,0)}
-function fmtDate(d){return d?new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}):''}
-function openTab(tab){
- document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
- document.getElementById('view-'+tab).classList.add('active');
- document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
- window.scrollTo({top:0,behavior:'smooth'});
-}
-function render(){
- const income=totalIncome(), flex=flexible(), cats=state.categories;
- document.getElementById('monthLabel').textContent=new Date().toLocaleDateString('ru-RU',{month:'long',year:'numeric'});
- document.getElementById('available').textContent=money(Math.max(0,flex));
- document.getElementById('heroSub').textContent=income?`После резервов · ${money(flex)} ${flex<0?'дефицит':''}`:'Добавь поступление, чтобы рассчитать бюджет';
- document.getElementById('totalIncome').textContent=money(income);
- document.getElementById('savings').textContent=money(savings());
- document.getElementById('credits').textContent=money(creditSum());
- document.getElementById('mandatory').textContent=money(obligationSum()-creditSum());
- document.getElementById('spentTotal').textContent=money(totalSpent());
- const planned=Math.max(0,flex);
- const spent=totalSpent();
- const planSum=cats.reduce((s,c)=>s+planned*c.percent/100,0);
- document.getElementById('leftTotal').textContent=money(Math.max(0,planSum-spent));
- document.getElementById('obligationsTotal').textContent=money(obligationSum());
- document.getElementById('unallocated').textContent=money(Math.max(0,planned-planSum));
- const alert=document.getElementById('alertBox');
- if(income===0) alert.innerHTML='<div class="notice">Добавь доход — приложение рассчитает 10% в фонд отопления, кредиты, обязательные платежи и доступный бюджет.</div>';
- else if(flex<0) alert.innerHTML=`<div class="notice">Внимание: обязательные резервы превышают доход на ${money(-flex)}. Пересмотри платежи или бюджет.</div>`;
- else if(cats.reduce((s,c)=>s+c.percent,0)!==100) alert.innerHTML='<div class="notice">Доли категорий должны в сумме составлять 100%. Исправь их в настройках.</div>';
- else alert.innerHTML='<div class="notice good">Приоритеты учтены: сначала 10% в фонд отопления, затем кредиты и обязательные платежи.</div>';
- document.getElementById('categorySummary').innerHTML=cats.map(c=>{
-  const p=Math.max(0,flex)*c.percent/100, s=spentIn(c.name), left=p-s, pct=p?Math.min(100,s/p*100):0;
-  return `<div class="category"><div class="row"><div><div class="cat-name">${esc(c.name)}</div><div class="cat-meta">${c.percent}% бюджета · потрачено ${money(s)}</div></div><div class="cat-amount">${money(p)}<div class="cat-meta ${left<0?'negative':'positive'}">${left<0?'перерасход ': 'осталось '}${money(Math.abs(left))}</div></div></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
- }).join('')||'<div class="empty">Добавь категории в настройках.</div>';
- document.getElementById('incomeList').innerHTML=listHtml(state.incomes.filter(inMonth).slice().reverse(),'income');
- document.getElementById('expenseList').innerHTML=listHtml(state.expenses.filter(inMonth).slice().reverse(),'expense');
- const sel=document.getElementById('expenseCategory');
- const old=sel.value;
- sel.innerHTML=cats.map(c=>`<option>${esc(c.name)}</option>`).join('');
- if(cats.some(c=>c.name===old))sel.value=old;
- renderSettings();
-}
-function listHtml(items,type){
- if(!items.length)return '<div class="empty">Записей пока нет</div>';
- return items.map(x=>`<div class="list-item"><div><strong>${esc(x.title||x.category||'Поступление')}</strong><small>${fmtDate(x.date)}${x.note?' · '+esc(x.note):''}</small></div><div style="text-align:right"><strong>${money(x.amount)}</strong><br><button class="delete" onclick="removeItem('${type}','${x.id}')">Удалить</button></div></div>`).join('');
-}
-function addIncome(){
- const amount=num('incomeAmount'); if(!amount)return alert('Введи сумму дохода.');
- state.incomes.push({id:crypto.randomUUID(),amount, title:document.getElementById('incomeSource').value.trim()||'Доход',date:document.getElementById('incomeDate').value||new Date().toISOString().slice(0,10)});
- document.getElementById('incomeAmount').value='';document.getElementById('incomeSource').value='';save();openTab('home');
-}
-function addExpense(){
- const amount=num('expenseAmount');if(!amount)return alert('Введи сумму расхода.');
- state.expenses.push({id:crypto.randomUUID(),amount,category:document.getElementById('expenseCategory').value,date:document.getElementById('expenseDate').value||new Date().toISOString().slice(0,10),note:document.getElementById('expenseNote').value.trim()});
- document.getElementById('expenseAmount').value='';document.getElementById('expenseNote').value='';save();openTab('home');
-}
-function removeItem(type,id){if(!confirm('Удалить эту запись?'))return;const k=type==='income'?'incomes':'expenses';state[k]=state[k].filter(x=>x.id!==id);save()}
-function saveSettings(){
- ['credit1','credit2','housing','utilities','communication','otherMandatory'].forEach(k=>state.obligations[k]=num(k));
- save();alert('Обязательные платежи сохранены.');
-}
-function renderSettings(){
- Object.keys(state.obligations).forEach(k=>{const el=document.getElementById(k);if(el&&document.activeElement!==el)el.value=state.obligations[k]||''});
- document.getElementById('categorySettings').innerHTML=state.categories.map((c,i)=>`<div class="field"><label>${esc(c.name)} — доля, %</label><div class="row"><input data-cat="${i}" type="number" inputmode="decimal" min="0" max="100" value="${c.percent}" style="max-width:110px"><span class="hint">${esc(c.name)}</span></div></div>`).join('');
-}
-function saveCategories(){
- const inputs=[...document.querySelectorAll('[data-cat]')];
- inputs.forEach(el=>state.categories[Number(el.dataset.cat)].percent=Math.max(0,Number(el.value)||0));
- const sum=state.categories.reduce((s,c)=>s+c.percent,0);
- if(Math.abs(sum-100)>.001){alert(`Сейчас сумма долей ${sum}%. Нужно ровно 100%.`);return}
- save();alert('Распределение сохранено.');
-}
-function exportData(){
- const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='my-finance-backup.json';a.click();URL.revokeObjectURL(url);
-}
-function importData(e){
- const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.incomes||!x.expenses||!x.obligations||!x.categories)throw 0;state=x;save();alert('Резервная копия восстановлена.')}catch(err){alert('Не удалось прочитать файл резервной копии.')}};r.readAsText(f);e.target.value='';
-}
-function resetData(){if(!confirm('Точно удалить все доходы, расходы и настройки? Сначала рекомендуем сделать экспорт.'))return;state=structuredClone(defaultState);save()}
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-const today=new Date().toISOString().slice(0,10);
-document.getElementById('incomeDate').value=today;document.getElementById('expenseDate').value=today;
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-render();
-</script>
-</body>
-</html>
+<header><div class="logo">MY<span>FINANCE</span></div><div class="month" id="monthLabel"></div></header>
+<main>
+<section id="dashboard" class="view active">
+ <div class="month-control"><span class="sub">Период</span><input type="month" id="period"></div>
+ <div class="hero">
+  <div class="eyebrow">Свободно после расходов и резервов</div>
+  <div class="big" id="available">0 ₽</div><div class="hero-sub" id="heroCaption">Добавьте первый доход, чтобы начать учёт</div>
+  <div class="stats">
+   <div class="stat"><small>Доходы</small><b id="incomeTotal">0 ₽</b></div>
+   <div class="stat"><small>Фонд отопления · 10%</small><b id="fundTotal">0 ₽</b></div>
+   <div class="stat"><small>Кредиты и обязательства</small><b id="mandatoryTotal">0 ₽</b></div>
+   <div class="stat"><small>Расходы за месяц</small><b id="spentTotal">0 ₽</b></div>
+  </div>
+ </div>
+ <div class="actions"><button class="btn" data-go="income">＋ Добавить доход</button><button class="btn secondary" data-go="expense">－ Записать расход</button></div>
+ <div class="note">Приоритеты: сначала 10% в фонд отопления, затем обязательные платежи. Остаток распределяется по бюджетным категориям.</div>
+ <div class="row"><h2>Бюджет по категориям</h2><span class="sub">план / потрачено</span></div>
+ <div class="card" id="budgets"></div>
+ <div class="row"><h2>Последние операции</h2><span class="sub" id="recentCount"></span></div>
+ <div class="card" id="recent"></div>
+</section>
+<section id="income" class="view">
+ <h2>Доходы</h2><div class="sub">Все поступления за выбранный месяц</div>
+ <div class="card"><form id="incomeForm">
+  <label>Сумма поступления, ₽</label><input name="amount" type="number" min="1" step="0.01" placeholder="Например, 75000" required>
+  <label>Источник</label><input name="source" maxlength="80" placeholder="Зарплата, аванс, премия..." required>
+  <label>Дата</label><input name="date" type="date" required>
+  <button class="btn" id="incomeSubmit">Добавить поступление</button><button class="btn secondary" type="button" id="incomeCancel" hidden>Отмена редактирования</button>
+ </form></div>
+ <h2>История поступлений</h2><div class="card" id="incomeList"></div>
+</section>
+<section id="expense" class="view">
+ <h2>Расходы</h2><div class="sub">Записывайте траты — бюджет пересчитается автоматически</div>
+ <div class="card"><form id="expenseForm">
+  <label>Сумма расхода, ₽</label><input name="amount" type="number" min="0.01" step="0.01" placeholder="Например, 1250" required>
+  <label>Категория</label><select name="category" id="expenseCategory"></select>
+  <label>Тип платежа</label><select name="kind"><option value="variable">Обычный расход</option><option value="mandatory">Кредит / обязательный платёж</option></select>
+  <label>Комментарий</label><input name="note" maxlength="120" placeholder="Необязательно">
+  <label>Дата</label><input name="date" type="date" required>
+  <button class="btn" id="expenseSubmit">Сохранить расход</button><button class="btn secondary" type="button" id="expenseCancel" hidden>Отмена редактирования</button>
+ </form></div>
+ <h2>История расходов</h2><div class="card" id="expenseList"></div>
+</section>
+<section id="settings" class="view">
+ <h2>Настройки бюджета</h2>
+ <div class="card">
+  <div class="row"><b>Обязательные платежи в месяц</b><span class="sub">резерв до распределения</span></div>
+  <form id="settingsForm">
+   <div class="form-grid">
+    <div><label>Кредит 1, ₽</label><input name="loan1" type="number" min="0" step="1"></div>
+    <div><label>Кредит 2, ₽</label><input name="loan2" type="number" min="0" step="1"></div>
+    <div><label>Жильё / аренда, ₽</label><input name="housing" type="number" min="0" step="1"></div>
+    <div><label>ЖКХ, ₽</label><input name="utilities" type="number" min="0" step="1"></div>
+    <div><label>Связь и интернет, ₽</label><input name="phone" type="number" min="0" step="1"></div>
+    <div><label>Другие обязательства, ₽</label><input name="other" type="number" min="0" step="1"></div>
+   </div>
+   <button class="btn">Сохранить обязательства</button>
+  </form>
+ </div>
+ <div class="card">
+  <div class="row"><b>Распределение остатка</b><span class="sub">доли должны быть 100%</span></div>
+  <div id="shares"></div>
+  <div class="row" style="margin-top:14px"><b>Итого доли</b><b id="shareSum">100%</b></div>
+  <button class="btn secondary" id="saveShares" style="width:100%;margin-top:16px">Сохранить доли</button>
+ </div>
+ <div class="card">
+  <b>Данные и резервная копия</b><p class="sub">Данные хранятся в этом браузере на этом iPhone. Экспортируйте резервную копию, чтобы не потерять записи.</p>
+  <div class="actions"><button class="small-btn" id="exportData">Экспорт данных</button><button class="small-btn" id="importButton">Импорт копии</button></div>
+  <input id="importFile" type="file" accept="application/json" hidden>
+  <p class="sub">Удаление всех данных необратимо.</p><button class="btn danger" id="resetData" style="width:100%">Сбросить все данные</button>
+ </div>
+ <div class="sub" style="padding:8px 4px">Версия 2.0 · Данные не отправляются на сервер.</div>
+</section>
+</main>
+<nav>
+ <button class="active" data-tab="dashboard"><strong>⌂</strong>Обзор</button>
+ <button data-tab="income"><strong>＋</strong>Доходы</button>
+ <button data-tab="expense"><strong>－</strong>Расходы</button>
+ <button data-tab="settings"><strong>⚙</strong>Настройки</button>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body></html>

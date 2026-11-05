@@ -1,11 +1,11 @@
 {
-  "name": "Мой бюджет — MY FINANCE",
-  "short_name": "Мой бюджет",
+  "name": "MY FINANCE",
+  "short_name": "Finance",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0c131b",
-  "theme_color": "#101820",
+  "background_color": "#0b141d",
+  "theme_color": "#0b141d",
   "lang": "ru",
   "icons": [
     {
