@@ -29,7 +29,10 @@
       return {incomes,fixed,shares};
     } catch { return defaults(); }
   }
-  function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+  function save(){
+    try { localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
+    catch(error) { toast("Не удалось сохранить данные в памяти браузера. Проверь настройки Safari."); console.error("MY FINANCE storage error",error); }
+  }
   function makeId(){return `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;}
   function monthIncomes(){return state.incomes.filter(x=>x.date.slice(0,7)===selectedMonth);}
   function totals(){
@@ -110,7 +113,7 @@
     state.fixed=fixed;state.shares=shares;save();render();closeModal("settingsModal");toast("Настройки сохранены");
   });
   $("exportBtn").addEventListener("click",()=>{
-    const blob=new Blob([JSON.stringify({app:"MY FINANCE",version:"3.0.0",exportedAt:new Date().toISOString(),data:state},null,2)],{type:"application/json"});
+    const blob=new Blob([JSON.stringify({app:"MY FINANCE",version:"3.0.1",exportedAt:new Date().toISOString(),data:state},null,2)],{type:"application/json"});
     const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`my-finance-backup-${localDate(today)}.json`;a.click();URL.revokeObjectURL(a.href);toast("Резервная копия подготовлена");
   });
   $("importBtn").addEventListener("click",()=>$("importFile").click());
@@ -125,5 +128,6 @@
     state=defaults();save();render();closeModal("settingsModal");toast("Данные сброшены");
   });
   if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-  render();
+  try { render(); }
+  catch(error) { console.error("MY FINANCE render error",error); toast("Ошибка запуска интерфейса. Перезагрузи страницу."); }
 })();
