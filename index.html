@@ -1,124 +1,158 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b141d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>MY FINANCE</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
-<style>
-:root{--bg:#0b141d;--panel:#152330;--panel2:#1b2c3b;--line:#2a4050;--text:#f1f5f8;--muted:#9aabba;--mint:#79dfbf;--red:#ff8585;--yellow:#f4c66c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
-header{padding:22px 20px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:rgba(11,20,29,.96);z-index:5;backdrop-filter:blur(12px)}
-.logo{font-size:22px;font-weight:850;letter-spacing:-.6px}.logo span{color:var(--mint)}.month{color:var(--muted);font-size:14px}
-main{max-width:760px;margin:auto;padding:0 16px 24px}.view{display:none}.view.active{display:block}
-h2{font-size:21px;margin:18px 2px 14px}.sub{color:var(--muted);font-size:13px}
-.hero{background:linear-gradient(145deg,#203b49,#1a2c3b);border:1px solid #365365;border-radius:26px;padding:24px 20px;margin:12px 0 16px}
-.eyebrow{font-size:12px;letter-spacing:1.1px;color:#b8cbd4;text-transform:uppercase}.big{font-size:clamp(38px,10vw,52px);font-weight:850;letter-spacing:-2px;margin:12px 0 2px}.hero-sub{color:#b7c7d1;margin-bottom:18px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#132430;border:1px solid #2a3d4a;border-radius:18px;padding:13px}.stat small{display:block;color:#aebdc8;margin-bottom:8px}.stat b{font-size:20px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 20px}.btn{border:0;border-radius:17px;padding:16px 12px;font-weight:750;font-size:16px;background:var(--mint);color:#09241e;cursor:pointer}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.danger{background:#48272d;color:#ffdada}
-.note{background:#15382f;color:#a5ead4;border-radius:18px;padding:16px;line-height:1.45;margin:18px 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px;margin:12px 0}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.row + .row{margin-top:8px}.amount{font-weight:800;font-size:18px}.muted{color:var(--muted)}
-.progress{height:9px;background:#2a3b49;border-radius:20px;overflow:hidden;margin-top:12px}.progress i{display:block;height:100%;background:var(--mint);border-radius:20px;width:0}
-.category{padding:14px 0;border-bottom:1px solid #2a3b49}.category:last-child{border:0;padding-bottom:0}.category:first-child{padding-top:0}
-nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#0e1923;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));}
-nav button{border:0;background:transparent;color:var(--muted);padding:10px 3px;border-radius:15px;font-size:12px}nav button strong{display:block;font-size:21px;margin-bottom:3px}nav button.active{background:#203545;color:var(--mint)}
-label{display:block;color:var(--muted);font-size:14px;margin:14px 0 7px}input,select{width:100%;background:#0e1923;border:1px solid #304657;color:var(--text);padding:15px;border-radius:14px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--mint)}
-form .btn{width:100%;margin-top:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid>div{min-width:0}
-.entry{padding:13px 0;border-bottom:1px solid #2a3b49}.entry:last-child{border:0}.entry-title{font-weight:700}.entry-actions{display:flex;gap:8px}.tiny{border:1px solid var(--line);background:#1b2c3b;color:var(--text);border-radius:10px;padding:7px 10px}.tiny.edit{color:var(--mint)}
-.month-control{display:flex;gap:8px;align-items:center}.month-control input{max-width:170px;padding:9px}
-.empty{text-align:center;color:var(--muted);padding:28px 8px}
-.settings-row{padding:12px 0;border-bottom:1px solid #2a3b49}.settings-row:last-child{border:0}
-.small-btn{background:#203545;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:12px}
-.toast{position:fixed;left:16px;right:16px;bottom:100px;background:#234438;color:#d8fff1;padding:13px 16px;border-radius:14px;text-align:center;display:none;z-index:30}
-@media(min-width:600px){main{padding-left:22px;padding-right:22px}.hero{padding:28px}.card{padding:22px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10131d">
+  <meta name="description" content="MY FINANCE — распределение доходов и финансовая подушка">
+  <title>MY FINANCE</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header><div class="logo">MY<span>FINANCE</span></div><div class="month" id="monthLabel"></div></header>
-<main>
-<section id="dashboard" class="view active">
- <div class="month-control"><span class="sub">Период</span><input type="month" id="period"></div>
- <div class="hero">
-  <div class="eyebrow">Свободно после расходов и резервов</div>
-  <div class="big" id="available">0 ₽</div><div class="hero-sub" id="heroCaption">Добавьте первый доход, чтобы начать учёт</div>
-  <div class="stats">
-   <div class="stat"><small>Доходы</small><b id="incomeTotal">0 ₽</b></div>
-   <div class="stat"><small>Фонд отопления · 10%</small><b id="fundTotal">0 ₽</b></div>
-   <div class="stat"><small>Кредиты и обязательства</small><b id="mandatoryTotal">0 ₽</b></div>
-   <div class="stat"><small>Расходы за месяц</small><b id="spentTotal">0 ₽</b></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand">MY <span>FINANCE</span></div>
+        <div class="version">ЛИЧНЫЙ ФИНАНСОВЫЙ ПЛАНИРОВЩИК · v3.0.0</div>
+      </div>
+      <button class="icon-btn" id="settingsOpen" aria-label="Настройки">⚙</button>
+    </header>
+
+    <main>
+      <section class="month-row">
+        <div>
+          <div class="eyebrow">ПЕРИОД</div>
+          <input id="monthPicker" type="month" aria-label="Выбрать месяц">
+        </div>
+        <button class="text-btn" id="todayBtn">Текущий месяц</button>
+      </section>
+
+      <section class="hero-card">
+        <div class="eyebrow light">ДОХОД ЗА МЕСЯЦ</div>
+        <div class="hero-amount" id="monthIncome">0 ₽</div>
+        <div class="hero-foot">
+          <span>Финансовая подушка · 10%</span>
+          <strong id="monthReserve">0 ₽</strong>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article class="metric-card">
+          <span class="metric-icon purple">▣</span>
+          <div class="eyebrow">ОБЯЗАТЕЛЬСТВА</div>
+          <strong id="fixedTotal">0 ₽</strong>
+          <small>Платежи и кредиты</small>
+        </article>
+        <article class="metric-card">
+          <span class="metric-icon green">↗</span>
+          <div class="eyebrow">К РАСПРЕДЕЛЕНИЮ</div>
+          <strong id="availableTotal">0 ₽</strong>
+          <small>После резерва и платежей</small>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">ТВОИ ДЕНЬГИ</div>
+            <h2>Распределение</h2>
+          </div>
+          <button class="small-btn" id="editShares">Изменить доли</button>
+        </div>
+        <div id="shortageNotice" class="notice hidden"></div>
+        <div id="categories" class="category-list"></div>
+        <div class="total-line">
+          <span>Всего распределено</span>
+          <strong id="sharesTotal">100%</strong>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">НАКОПЛЕНИЯ</div>
+            <h2>Финансовая подушка</h2>
+          </div>
+          <span class="pill">10% с дохода</span>
+        </div>
+        <div class="reserve-card">
+          <div class="reserve-symbol">✦</div>
+          <div>
+            <div class="eyebrow">РАСЧЁТНО НАКОПЛЕНО</div>
+            <strong id="allReserve">0 ₽</strong>
+            <small>Сумма рассчитана по всем внесённым доходам. Это не банковский баланс.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section income-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">ПОПОЛНЕНИЯ</div>
+            <h2>Доходы</h2>
+          </div>
+          <button class="primary-btn" id="addIncomeOpen">＋ Добавить</button>
+        </div>
+        <div id="incomeList" class="income-list"></div>
+        <div id="emptyIncome" class="empty-state">
+          <div class="empty-icon">＋</div>
+          <strong>Доходов пока нет</strong>
+          <span>Добавь поступление — приложение рассчитает распределение автоматически.</span>
+        </div>
+      </section>
+
+      <section class="bottom-actions">
+        <button class="secondary-btn" id="exportBtn">Экспорт данных</button>
+        <button class="secondary-btn" id="importBtn">Импорт данных</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </section>
+    </main>
+    <footer>MY FINANCE <span>·</span> версия 3.0.0</footer>
   </div>
- </div>
- <div class="actions"><button class="btn" data-go="income">＋ Добавить доход</button><button class="btn secondary" data-go="expense">－ Записать расход</button></div>
- <div class="note">Приоритеты: сначала 10% в фонд отопления, затем обязательные платежи. Остаток распределяется по бюджетным категориям.</div>
- <div class="row"><h2>Бюджет по категориям</h2><span class="sub">план / потрачено</span></div>
- <div class="card" id="budgets"></div>
- <div class="row"><h2>Последние операции</h2><span class="sub" id="recentCount"></span></div>
- <div class="card" id="recent"></div>
-</section>
-<section id="income" class="view">
- <h2>Доходы</h2><div class="sub">Все поступления за выбранный месяц</div>
- <div class="card"><form id="incomeForm">
-  <label>Сумма поступления, ₽</label><input name="amount" type="number" min="1" step="0.01" placeholder="Например, 75000" required>
-  <label>Источник</label><input name="source" maxlength="80" placeholder="Зарплата, аванс, премия..." required>
-  <label>Дата</label><input name="date" type="date" required>
-  <button class="btn" id="incomeSubmit">Добавить поступление</button><button class="btn secondary" type="button" id="incomeCancel" hidden>Отмена редактирования</button>
- </form></div>
- <h2>История поступлений</h2><div class="card" id="incomeList"></div>
-</section>
-<section id="expense" class="view">
- <h2>Расходы</h2><div class="sub">Записывайте траты — бюджет пересчитается автоматически</div>
- <div class="card"><form id="expenseForm">
-  <label>Сумма расхода, ₽</label><input name="amount" type="number" min="0.01" step="0.01" placeholder="Например, 1250" required>
-  <label>Категория</label><select name="category" id="expenseCategory"></select>
-  <label>Тип платежа</label><select name="kind"><option value="variable">Обычный расход</option><option value="mandatory">Кредит / обязательный платёж</option></select>
-  <label>Комментарий</label><input name="note" maxlength="120" placeholder="Необязательно">
-  <label>Дата</label><input name="date" type="date" required>
-  <button class="btn" id="expenseSubmit">Сохранить расход</button><button class="btn secondary" type="button" id="expenseCancel" hidden>Отмена редактирования</button>
- </form></div>
- <h2>История расходов</h2><div class="card" id="expenseList"></div>
-</section>
-<section id="settings" class="view">
- <h2>Настройки бюджета</h2>
- <div class="card">
-  <div class="row"><b>Обязательные платежи в месяц</b><span class="sub">резерв до распределения</span></div>
-  <form id="settingsForm">
-   <div class="form-grid">
-    <div><label>Кредит 1, ₽</label><input name="loan1" type="number" min="0" step="1"></div>
-    <div><label>Кредит 2, ₽</label><input name="loan2" type="number" min="0" step="1"></div>
-    <div><label>Жильё / аренда, ₽</label><input name="housing" type="number" min="0" step="1"></div>
-    <div><label>ЖКХ, ₽</label><input name="utilities" type="number" min="0" step="1"></div>
-    <div><label>Связь и интернет, ₽</label><input name="phone" type="number" min="0" step="1"></div>
-    <div><label>Другие обязательства, ₽</label><input name="other" type="number" min="0" step="1"></div>
-   </div>
-   <button class="btn">Сохранить обязательства</button>
-  </form>
- </div>
- <div class="card">
-  <div class="row"><b>Распределение остатка</b><span class="sub">доли должны быть 100%</span></div>
-  <div id="shares"></div>
-  <div class="row" style="margin-top:14px"><b>Итого доли</b><b id="shareSum">100%</b></div>
-  <button class="btn secondary" id="saveShares" style="width:100%;margin-top:16px">Сохранить доли</button>
- </div>
- <div class="card">
-  <b>Данные и резервная копия</b><p class="sub">Данные хранятся в этом браузере на этом iPhone. Экспортируйте резервную копию, чтобы не потерять записи.</p>
-  <div class="actions"><button class="small-btn" id="exportData">Экспорт данных</button><button class="small-btn" id="importButton">Импорт копии</button></div>
-  <input id="importFile" type="file" accept="application/json" hidden>
-  <p class="sub">Удаление всех данных необратимо.</p><button class="btn danger" id="resetData" style="width:100%">Сбросить все данные</button>
- </div>
- <div class="sub" style="padding:8px 4px">Версия 2.0 · Данные не отправляются на сервер.</div>
-</section>
-</main>
-<nav>
- <button class="active" data-tab="dashboard"><strong>⌂</strong>Обзор</button>
- <button data-tab="income"><strong>＋</strong>Доходы</button>
- <button data-tab="expense"><strong>－</strong>Расходы</button>
- <button data-tab="settings"><strong>⚙</strong>Настройки</button>
-</nav>
-<div class="toast" id="toast"></div>
-<script src="app.js"></script>
-</body></html>
+
+  <div class="modal-backdrop hidden" id="incomeModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">НОВОЕ ПОПОЛНЕНИЕ</div><h2 id="incomeModalTitle">Добавить доход</h2></div><button class="close-btn" data-close="incomeModal">×</button></div>
+      <form id="incomeForm">
+        <label>Сумма, ₽<input id="incomeAmount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="Например, 75000" required></label>
+        <label>Дата поступления<input id="incomeDate" type="date" required></label>
+        <label>Источник / комментарий<input id="incomeNote" type="text" maxlength="80" placeholder="Зарплата, подработка…"></label>
+        <div class="form-actions"><button type="button" class="secondary-btn" data-close="incomeModal">Отмена</button><button class="primary-btn" type="submit">Сохранить</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="settingsModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">ПАРАМЕТРЫ</div><h2>Настройки</h2></div><button class="close-btn" data-close="settingsModal">×</button></div>
+      <form id="settingsForm">
+        <div class="setting-group">
+          <h3>Обязательные платежи в месяц</h3>
+          <label>Кредит №1, ₽<input id="credit1" type="number" min="0" step="0.01"></label>
+          <label>Кредит №2, ₽<input id="credit2" type="number" min="0" step="0.01"></label>
+          <label>Жильё / аренда, ₽<input id="housing" type="number" min="0" step="0.01"></label>
+          <label>ЖКХ, ₽<input id="utilities" type="number" min="0" step="0.01"></label>
+          <label>Связь, ₽<input id="phone" type="number" min="0" step="0.01"></label>
+          <label>Прочие обязательные, ₽<input id="otherFixed" type="number" min="0" step="0.01"></label>
+        </div>
+        <div class="setting-group">
+          <h3>Распределение остатка</h3>
+          <p class="helper">Укажи долю каждой категории. В сумме должно получиться ровно 100%.</p>
+          <div id="shareInputs"></div>
+          <div class="share-validation" id="shareValidation">Итого: 100%</div>
+        </div>
+        <div class="form-actions"><button type="button" class="secondary-btn" data-close="settingsModal">Отмена</button><button class="primary-btn" type="submit">Сохранить</button></div>
+      </form>
+      <div class="settings-footer">
+        <div class="version-label">MY FINANCE · VERSION 3.0.0</div>
+        <button type="button" class="danger-btn" id="resetBtn">Сбросить все данные</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
